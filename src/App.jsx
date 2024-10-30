@@ -23,16 +23,16 @@ export const App = () => {
   const [sortField, setSortField] = useState(DEFAULT_SORT_FIELD);
   const [reversed, setReversed] = useState(false);
 
-  let visibileGoods = [...goodsFromServer];
+  let visibleGoods = [...goodsFromServer];
 
   if (sortField) {
-    visibileGoods = visibileGoods.sort((good1, good2) => {
+    visibleGoods = visibleGoods.sort((good1, good2) => {
       switch (sortField) {
         case SORT_FIELD_ALPHABETICALLY:
           return good1.localeCompare(good2);
 
         case SORT_FIELD_LENGTH:
-          return good1[sortField] - good2[sortField];
+          return good1.length - good2.length;
 
         default:
           return 0;
@@ -41,7 +41,7 @@ export const App = () => {
   }
 
   if (reversed) {
-    visibileGoods = visibileGoods.reverse();
+    visibleGoods = visibleGoods.reverse();
   }
 
   return (
@@ -49,7 +49,7 @@ export const App = () => {
       <div className="buttons">
         <button
           type="button"
-          className={`button is-info ${sortField === SORT_FIELD_ALPHABETICALLY || 'is-light'}`}
+          className={`button ${sortField === SORT_FIELD_ALPHABETICALLY ? 'is-info' : 'is-light'}`}
           onClick={() => {
             setSortField(SORT_FIELD_ALPHABETICALLY);
           }}
@@ -59,7 +59,7 @@ export const App = () => {
 
         <button
           type="button"
-          className={`button is-success ${sortField === SORT_FIELD_LENGTH || 'is-light'}`}
+          className={`button ${sortField === SORT_FIELD_LENGTH ? 'is-success' : 'is-light'}`}
           onClick={() => {
             setSortField(SORT_FIELD_LENGTH);
           }}
@@ -69,7 +69,7 @@ export const App = () => {
 
         <button
           type="button"
-          className={`button is-warning ${reversed || 'is-light'}`}
+          className={`button ${reversed ? 'is-warning' : 'is-light'}`}
           onClick={() => {
             setReversed(!reversed);
           }}
@@ -92,8 +92,10 @@ export const App = () => {
       </div>
 
       <ul>
-        {visibileGoods.map(good => (
-          <li data-cy="Good">{good}</li>
+        {visibleGoods.map(good => (
+          <li data-cy="Good" key={good}>
+            {good}
+          </li>
         ))}
       </ul>
     </div>
